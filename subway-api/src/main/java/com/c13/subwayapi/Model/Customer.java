@@ -1,9 +1,12 @@
 package com.c13.subwayapi.Model;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Customer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
     private Long id;
 
     private String name;
