@@ -1,6 +1,7 @@
 package com.c13.subwayapi.Model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Customer {
@@ -8,7 +9,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long id;
-
+ @Column(name = "name")
+  @NotEmpty
     private String name;
 
 

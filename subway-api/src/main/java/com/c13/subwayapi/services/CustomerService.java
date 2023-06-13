@@ -1,6 +1,7 @@
 package com.c13.subwayapi.services;
 
 import com.c13.subwayapi.Model.Customer;
+import com.c13.subwayapi.eceptions.ResourceNotFoundException;
 import com.c13.subwayapi.repo.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,20 +12,29 @@ public class CustomerService {
     private CustomerRepo customerRepo;
 
 
+
+
+protected void verifyCustomerId(Long customerId) throws ResourceNotFoundException{
+    if(!(this.customerRepo.existsById(customerId))){
+        throw new ResourceNotFoundException("Customer with Id Of" + customerId + "does not exist" );
+    }
+}
+
     public void addCustomer(Customer customer){
         customerRepo.save(customer);
     }
 
-  public Customer getCustomerId(Long id){
-       return customerRepo.findById( id).orElse(null);
+  public Customer getCustomerId(Long idOfCustomer){
+    this.verifyCustomerId(idOfCustomer);
+       return customerRepo.findById(idOfCustomer).orElse(null);
 
 }
 
-public void updateCustomer(Long id, Customer customer){
-customer.setId(id);
-customerRepo.save(customer);
-
-
+  public void updateCustomer(Long idOfCustomer, Customer updatecustomer) throws ResourceNotFoundException{
+ this.verifyCustomerId(idOfCustomer);
+ Customer customer = customerRepo.findById(idOfCustomer).get();
+ customer.setName(updatecustomer.getName());
+ customerRepo.save(updatecustomer);
 }
 
     public Iterable<Customer> getAllCustomers(){
@@ -32,7 +42,9 @@ customerRepo.save(customer);
     }
 
     public void deleteCustomer(Long id){
+   this.verifyCustomerId(id);
         customerRepo.deleteById(id);
+
     }
 
 

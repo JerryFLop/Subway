@@ -5,22 +5,28 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 @Entity
 public class Orders {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        private Long id;
+        @Column(name = "type_bread")
+       @NotNull
+       private String typeOfBread;
+        @Column(name = "type_cheese")
+        private String typeOfCheese;
+        @Column(name = "type_meat")
+        private String[] typeOfMeat;
+        @Column(name = "toppings")
+        private String[] Toppings ;
 
-    private String typeOfBread;
-    private String typeOfCheese;
-
-    private String[] Toppings ;
-
-@ManyToOne(fetch = FetchType.LAZY, optional = false)
-@JoinColumn(name = "customer_id", nullable = false)
-@OnDelete(action = OnDeleteAction.CASCADE)
-@JsonIgnore
-    private Customer customer;
+         @ManyToOne(fetch = FetchType.LAZY, optional = false)
+         @JoinColumn(name = "customer_id", nullable = false)
+         @OnDelete(action = OnDeleteAction.CASCADE)
+         @JsonIgnore
+         private Customer customer;
 
     public Long getId() {
         return id;
@@ -44,6 +50,14 @@ public class Orders {
 
     public void setTypeOfCheese(String typeOfCheese) {
         this.typeOfCheese = typeOfCheese;
+    }
+
+    public String[] getTypeOfMeat() {
+        return typeOfMeat;
+    }
+
+    public void setTypeOfMeat(String[] typeOfMeat) {
+        this.typeOfMeat = typeOfMeat;
     }
 
     public String[] getToppings() {
