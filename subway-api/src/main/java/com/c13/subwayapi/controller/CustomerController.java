@@ -9,12 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class CustomerController {
 
-    Logger logger = LoggerFactory.getLogger(CustomerController.class);
+   public static Logger logger = LoggerFactory.getLogger(CustomerController.class);
     @Autowired
     private CustomerService customerService;
 
@@ -45,17 +46,17 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+@GetMapping("/customers")
+    private ResponseEntity<Iterable<Customer>>getAllCustomers(){
+        return new ResponseEntity<>(customerService.getAllCustomers(),HttpStatus.OK);
+}
 
-    @GetMapping("/customers")
-    public ResponseEntity<?>getCustomerByName(@RequestParam(value = "name", required = false) String name){
 
-        Customer customer = customerService.findACustomerByName(name);
+    @GetMapping("/customers/search")
+    public ResponseEntity<List<Customer>>getCustomerByName(@RequestParam(value = "name", required = false) String name){
 
-        if(name != null){
-            return new ResponseEntity<>(customer, HttpStatus.OK);
-        }
 
-        return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.findACustomerByName(name), HttpStatus.OK);
 
 
 

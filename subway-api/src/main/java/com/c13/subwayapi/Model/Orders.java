@@ -18,7 +18,7 @@ public class Orders {
         @Column(name = "type_cheese")
         private String typeOfCheese;
         @Column(name = "type_meat")
-        private String[] typeOfMeat;
+        private String typeOfMeat;
         @Column(name = "toppings")
         private String[] Toppings ;
 
@@ -52,11 +52,11 @@ public class Orders {
         this.typeOfCheese = typeOfCheese;
     }
 
-    public String[] getTypeOfMeat() {
+    public String getTypeOfMeat() {
         return typeOfMeat;
     }
 
-    public void setTypeOfMeat(String[] typeOfMeat) {
+    public void setTypeOfMeat(String typeOfMeat) {
         this.typeOfMeat = typeOfMeat;
     }
 

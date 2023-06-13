@@ -1,8 +1,10 @@
 package com.c13.subwayapi.handler;
 
+import com.c13.subwayapi.eceptions.MissingPropertyException;
 import com.c13.subwayapi.eceptions.ResourceNotFoundException;
 import com.c13.subwayapi.error.ErrorDetail;
 import com.c13.subwayapi.error.ValidationError;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
+   @Autowired
     private MessageSource messageSource;
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -34,6 +36,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         errorDetail.setDeveloperMessage(resourceNotFoundException.getClass().getName());
         return (new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND));
     }
+
+    @ExceptionHandler(MissingPropertyException.class)
+    public ResponseEntity<?> handleUnrecognizedPropertyException(MissingPropertyException missingPropertyException) {
+        ErrorDetail errorDetail = new ErrorDetail();
+        errorDetail.setTimeStamp(new Date().getTime());
+        errorDetail.setStatus((short)HttpStatus.BAD_REQUEST.value());
+        errorDetail.setTitle("Missing Property");
+        errorDetail.setDetail(missingPropertyException.getMessage());
+        errorDetail.setDeveloperMessage(missingPropertyException.getClass().getName());
+        return (new ResponseEntity<>(errorDetail, HttpStatus.BAD_REQUEST));
+    }
+
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ErrorDetail errorDetail = new ErrorDetail();
